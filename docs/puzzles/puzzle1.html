@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Puzzle 1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      margin: 0;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at center, #1f1f1f, #121212);
+      color: #fff;
+      position: relative;
+    }
+    .back-button {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: linear-gradient(90deg, #64b5f6, #42a5f5);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .back-button:hover {
+      transform: scale(1.05);
+    }
+    .puzzle {
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      letter-spacing: 0.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      user-select: none;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 360px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 0.75rem;
+      background-color: #2c2c2c;
+      color: #fff;
+      box-shadow: inset 0 0 5px #000;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      margin-bottom: 1rem;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      background-color: #333;
+      box-shadow: 0 0 0 2px #90caf9;
+    }
+    button#btn-submit {
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      background: linear-gradient(90deg, #64b5f6, #42a5f5);
+      color: #fff;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button#btn-submit:hover {
+      transform: scale(1.03);
+    }
+    .error {
+      display: none;
+      margin-top: 1rem;
+      color: #f44336;
+      font-size: 0.95rem;
+    }
+
+    /* feedback animations */
+    @keyframes shake {
+      0%,100%   { transform: translateX(0); }
+      20%,60%   { transform: translateX(-8px); }
+      40%,80%   { transform: translateX(8px); }
+    }
+    @keyframes flash-green {
+      0%,100%   { background-color: #2c2c2c; }
+      50%       { background-color: #4caf50; }
+    }
+    /* apply to input */
+    input.error-anim {
+      animation: shake 0.5s;
+    }
+    input.success-anim {
+      animation: flash-green 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-button" id="btn-back">Voltar</button>
+  <div class="puzzle">
+    .- / ‑-.- / ..- / . / .-.. / .
+  </div>
+  <div class="input-container">
+    <input type="text" id="answer" placeholder="Palavra-chave" autocomplete="off" />
+    <button id="btn-submit">Enviar</button>
+    <div id="error" class="error">Resposta incorreta.</div>
+  </div>
+
+  <script>
+    // botão de retorno
+    document.getElementById('btn-back').addEventListener('click', () => {
+      history.back();
+    });
+
+    // remove acentos
+    function removeAccents(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    const KEYWORD = 'aquele';
+    const inputEl = document.getElementById('answer');
+    const errorEl = document.getElementById('error');
+
+    document.getElementById('btn-submit').addEventListener('click', () => {
+      const raw = inputEl.value;
+      const val = removeAccents(raw).trim().toLowerCase();
+
+      // reset feedback
+      errorEl.style.display = 'none';
+      inputEl.classList.remove('error-anim', 'success-anim');
+      void inputEl.offsetWidth;
+
+      if (val === KEYWORD) {
+        inputEl.classList.add('success-anim');
+        setTimeout(() => history.back(), 500);
+      } else {
+        inputEl.classList.add('error-anim');
+        errorEl.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
