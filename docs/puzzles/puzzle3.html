@@ -183,16 +183,12 @@
     });
 
     function baixarImagem() {
-  const win = window.open('', '_blank');
-  if (!win) return; // bloqueado por popup?
-
-  const link = win.document.createElement('a');
+  const link = document.createElement('a');
   link.href = 'Photoshop.png';
   link.download = 'Photoshop.png';
-  win.document.body.appendChild(link);
-
-  // aciona o download
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
 }
   </script>
 </body>
