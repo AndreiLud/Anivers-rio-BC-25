@@ -134,46 +134,43 @@
   </div>
 
   <script>
-    // 1. Defina a senha sem acentos já normalizada
-    const rawPassword = "Aquele Prédio Feio Bruno";
-    const finalPassword = removeAccents(rawPassword)
-      .trim()
+      // 1. Defina a senha sem acentos e sem espaços
+  const rawPassword = "Aquele Prédio Feio Bruno";
+  const finalPassword = removeAccents(rawPassword)
+    .replace(/\s+/g, '')
+    .toLowerCase();
+
+  // 2. Seletores
+  const container = document.querySelector('.password-container');
+  const btn = document.getElementById('btn-enviar');
+  const errEl = document.getElementById('erro');
+
+  // 3. Evento de clique
+  btn.addEventListener('click', () => {
+    const rawInput = document.getElementById('senha').value;
+    const val = removeAccents(rawInput)
+      .replace(/\s+/g, '')
       .toLowerCase();
-  
-    // 2. Seletores
-    const container = document.querySelector('.password-container');
-    const btn = document.getElementById('btn-enviar');
-    const errEl = document.getElementById('erro');
-  
-    // 3. Evento de clique
-    btn.addEventListener('click', () => {
-      // lê e normaliza a tentativa do usuário
-      const rawInput = document.getElementById('senha').value;
-      const val = removeAccents(rawInput)
-        .trim()
-        .toLowerCase();
-  
-      // reseta feedback
-      errEl.style.display = 'none';
-      container.classList.remove('error-anim');
-      document.getElementById('senha').classList.remove('success-anim');
-      void container.offsetWidth;
-      void document.getElementById('senha').offsetWidth;
-  
-      // comparação sem acentos
-      if (val === finalPassword) {
-        document.getElementById('senha').classList.add('success-anim');
-        setTimeout(() => window.location.href = 'final.html', 500);
-      } else {
-        container.classList.add('error-anim');
-        errEl.style.display = 'block';
-      }
-    });
-  
-    // Função para remover acentos
-    function removeAccents(str) {
-      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    errEl.style.display = 'none';
+    container.classList.remove('error-anim');
+    document.getElementById('senha').classList.remove('success-anim');
+    void container.offsetWidth;
+    void document.getElementById('senha').offsetWidth;
+
+    if (val === finalPassword) {
+      document.getElementById('senha').classList.add('success-anim');
+      setTimeout(() => window.location.href = 'final.html', 500);
+    } else {
+      container.classList.add('error-anim');
+      errEl.style.display = 'block';
     }
+  });
+
+  // Função para remover acentos
+  function removeAccents(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
   </script>
 </body>
 </html>
